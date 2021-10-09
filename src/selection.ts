@@ -10,6 +10,7 @@ export class CustomSelectView extends HTMLElement {
         if (this.getAttribute("theme") === "dark"){
             style.textContent = `
                 button {
+                  font-size: 1rem;
                 text-align: start;
                 background-color: #222222;
                 border: none;
@@ -36,6 +37,7 @@ background-color: #FFFFFF;
 border: none;
 padding: 8px 8px;
 color: black;
+font-size: 1rem;
 }
 button:hover {
 background-color: #F0F0F0;
@@ -62,14 +64,17 @@ color: white;
             optionElement.setAttribute("value", option.value);
             optionElement.innerText = option.label;
             optionElement.addEventListener("click", ()=>{
+                // console.debug("dispatch option-select");
                 this.dispatchEvent(new CustomEvent(
                     "option-select", {detail: {
                         value: option.value
                     }}
                 ));
             });
+            // optionElement.setAttribute("onclick", "alert('click')");
             optionsListContainer.appendChild(optionElement);
         }
+        console.debug("set options");
     }
     get options() {
         return this.internalOptions;
@@ -138,8 +143,9 @@ color: white;
           box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
         }
         input#search {
-background-color: #303030;
-transition: border-color 0.1s;
+          background-color: #303030;
+          transition: border-color 0.1s;
+          font-size: 1rem;
           margin: 4px 4px;
           border-radius: 0px;
           border: 2px solid #303030;
@@ -169,7 +175,7 @@ border-color: #FF3311;
           width: calc(100% - 8px);
           margin: 0px 4px;
           border: 1px solid #B0B0B0;
-background-color: #808080;
+background-color: white;
         }
         button#create-new {
           text-align: start;
@@ -178,6 +184,7 @@ color: white;
           border: none;
           padding: 8px 4px;
           color:black;
+          font-size: 1rem;
         }
         button#create-new:hover {
           background-color: #F0F0F0;
@@ -189,8 +196,9 @@ color: white;
           box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
         }
         input#search {
-background-color: #FFFFFF;
-transition: border-color 0.1s;
+          background-color: #FFFFFF;
+          transition: border-color 0.1s;
+          font-size: 1rem;
           margin: 5px 5px;
           border-radius: 0px;
           border: 1px solid #707070;
@@ -222,42 +230,67 @@ border-color: #FF3311;
 `;
 
         shadow.appendChild(style);
-        shadow.getElementById("search").oninput = (event: Event) => {
+        const searchElement = shadow.getElementById("search");
+        const searchFormElement = shadow.getElementById("search-form");
+        searchElement.oninput = (event: Event) => {
+            // console.log("oninput");
             this.onSearchInputChange((event.target as any).value);
         }
-        shadow.getElementById("search").onkeydown = (event: KeyboardEvent) => {
+        searchElement.onkeydown = (event: KeyboardEvent) => {
             // console.log("on key down");
+            const filteredOptions =  (this.shadowRoot.getElementById("select-view") as CustomSelectView).options;
             if (event.key === "ArrowUp") {
                 this.selectedOptionIndex -= 1;
                 if (this.selectedOptionIndex < 0) this.selectedOptionIndex = 0;
-                this.shadowRoot.getElementById("search").blur();
+                if (this.selectedOptionIndex >= filteredOptions.length) this.selectedOptionIndex = filteredOptions.length - 1;
+                // this.shadowRoot.getElementById("search").blur();
+                // setTimeout(()=>{this.onFocus();}, 20);
                 this.onFocus();
                 this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             } else if (event.key === "ArrowDown") {
                 this.selectedOptionIndex += 1;
-                if (this.selectedOptionIndex >= this.options.length) this.selectedOptionIndex = this.options.length - 1;
-                this.shadowRoot.getElementById("search").blur();
+                if (this.selectedOptionIndex < 0) this.selectedOptionIndex = 0;
+                if (this.selectedOptionIndex >= filteredOptions.length) this.selectedOptionIndex = filteredOptions.length - 1;
+                // this.shadowRoot.getElementById("search").blur();
                 this.onFocus();
+                // setTimeout(()=>{this.onFocus();}, 20);
                 this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             } else if (event.key === "Escape") {
                 this.onBlur();
             }
         }
-        shadow.getElementById("search-form").onsubmit = (event: Event) => {
+        searchFormElement.onsubmit = (event: Event) => {
             this.onSearchFormSubmit();
             return false;
         }
-        shadow.getElementById("search-form").onfocus = () => {this.onFocus()};
-        shadow.getElementById("search").onfocus = () => {this.onFocus()};
+        searchFormElement.onfocus = () => {this.onFocus()};
+        searchElement.onfocus = () => {this.onFocus()};
         this.Options = [
             {value: 0, label: "dog"},
             {value: 1, label: "cat"},
             {value: 2, label: "rabbit"},
         ];
+        searchElement.onblur = () => {
+          // console.log("search blur");
+          //this.onBlur();
+        }
+        searchFormElement.onblur = () => {
+          // console.log("search form blur");
+        }
+
         this.options = this.Options;
-        this.onblur = ()=>{this.onBlur()};
+        this.onblur = ()=>{
+          // console.log("this blur");
+            setTimeout(() => {
+                this.onBlur();
+            }, 10);
+          // this.onBlur()
+        };
         this.onfocus = ()=>{this.onFocus()};
+
         shadow.getElementById("select-view").addEventListener("option-select", (event: CustomEvent) => {
+          // console.debug("received option-select");
+          // BUG: safariではinputにフォーカスがあったていると、クリックイベントが起きない。
             const selectedValue = (event.detail as any).value;
             this.onOptionSelected((selectedValue));
         });
@@ -302,10 +335,14 @@ border-color: #FF3311;
     }
     onOptionSelected(value: any ){
         let label = "";
+        let optionIndex = 0;
         for(const option of this.Options){
             if (option.value === value){
                 label = option.label;
+                this.selectedOptionIndex = optionIndex;
+                this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             }
+            optionIndex += 1;
         }
         (this.shadowRoot.getElementById("search") as HTMLInputElement).value = label;
         this.dispatchEvent(new CustomEvent("type-select-change", {detail: {

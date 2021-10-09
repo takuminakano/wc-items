@@ -41,51 +41,53 @@ export class TabSelection extends ComponentBase {
     }
     getStyle(){
         return `div#root {
-display: grid;
-gap: 0px;
-      grid-auto-columns: 1fr;
-      grid-auto-flow: column;
-      border-radius: 2px;
-    }
-div#root.dark {
-background-color: #1F1F1F;
-border: 1px solid #505050;
-}
-div#root.light {
-background-color: white;;
-border: 1px solid #C0C0C0;
-}
-    button {
-      appearance: none;
-      margin: 0px;
-      margin-right: auto;
-      margin-left: auto;
-      border: 0px;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      font-family: system-ui;
-    }
-    div.light button {
-background-color: transparent
-}
-    div.dark button {
-background-color: rgba(0, 0, 0, 0.0);
-}
-    div.dark button.selected{
-      color: rgba(0, 0, 0, 1.0);
-      //background-color: rgba(0, 0, 0, 0.07);
-    }
-    div.dark button.not-selected{
-      color: rgba(255, 255, 255, 0.8);
-      //background-color: rgba(0, 0, 0, 0);
-    }
+          display: grid;
+          gap: 0px;
+          grid-auto-columns: 1fr;
+          grid-auto-flow: column;
+          border-radius: 0px;
+        }
+        div#root.dark {
+          background-color: #1F1F1F;
+          border: 1px solid #505050;
+        }
+        div#root.light {
+          background-color: white;;
+          border: 1px solid transparent;
+        }
+        button {
+          appearance: none;
+          margin: 0px;
+          margin-right: auto;
+          margin-left: auto;
+          border: 0px;
+          padding: 4px 8px;
+          font-size: 0.8rem;
+          font-weight: bold;
+          font-family: system-ui;
+        }
+        div.light button {
+          background-color: transparent
+        }
+        div.dark button {
+          background-color: rgba(0, 0, 0, 0.0);
+        }
+        div.dark button.selected{
+          color: rgba(0, 0, 0, 1.0);
+          //background-color: rgba(0, 0, 0, 0.07);
+        }
+        div.dark button.not-selected{
+          color: rgba(255, 255, 255, 0.8);
+          //background-color: rgba(0, 0, 0, 0);
+        }
+        
+
     div.light button.selected { color: white;}
     div.light button.not-selected { color: #505050;}
     div.selected, div.not-selected{
       display: flex;
       padding: 0px 4px;
-border-radius: 2px;
+border-radius: 0px;
 transition: background-color 0.1s;
     }
     div.dark div.selected {
@@ -96,14 +98,14 @@ transition: background-color 0.1s;
 
     }
     div.dark div.not-selected:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: #303030;
     }
 div.light div.not-selected:hover {background-color: rgba(0, 0, 0, 0.05);}
     div.light div.selected {
 background-color: #0077FF;
 }
 div.light div.not-selected {
-background-color: white;
+background-color: #F7F7F7;
 }
 
     `;
