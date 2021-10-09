@@ -1,4 +1,7 @@
 import { TypeSelectView, CustomSelectView } from './selection';
+import './button';
+import './linkComponent';
+import './inputs';
 // import { TabSelection } from './tabSelection';
 customElements.define("custom-select-view", CustomSelectView);
 customElements.define("type-select-view", TypeSelectView);
