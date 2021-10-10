@@ -55,6 +55,57 @@ color: white;
         shadow.innerHTML = `<div><div id="options-list" style="display: flex; flex-direction: column;"></div></div>`;
         shadow.appendChild(style);
     }
+    renderAll(){
+         const style = document.createElement("style");
+        if (this.getAttribute("theme") === "dark"){
+            style.textContent = `
+                button {
+                  font-size: 1rem;
+                text-align: start;
+                background-color: #222222;
+                border: none;
+                padding: 8px 8px;
+                color: white;
+                }
+                button:hover {
+                background-color: #333333;
+                }
+                button.selected {
+                background-color: #0077FF;
+                color: white;
+                }
+                .d-none { display: none; }
+                .d-block { display: block;}
+                .d-flex { display: flex; flex-direction: column;}
+                }
+           `;
+        } else {
+            style.textContent = `
+button {
+text-align: start;
+background-color: #FFFFFF;
+border: none;
+padding: 8px 8px;
+color: black;
+font-size: 1rem;
+}
+button:hover {
+background-color: #F0F0F0;
+}
+button.selected {
+background-color: #0077FF;
+color: white;
+}
+.d-none { display: none; }
+.d-block { display: block;}
+.d-flex { display: flex; flex-direction: column;}
+}
+`;
+        }
+        this.shadowRoot.innerHTML = `<div><div id="options-list" style="display: flex; flex-direction: column;"></div></div>`;
+        this.shadowRoot.appendChild(style);
+
+    }
     set options(options: {[key: string]:any}[]){
         this.internalOptions = options;
         const optionsListContainer = this.shadowRoot.getElementById("options-list");
@@ -91,6 +142,9 @@ color: white;
             if (this.shadowRoot.getElementById("options-list").getElementsByTagName("button").length > selectedOptionIndex){
                 this.shadowRoot.getElementById("options-list").getElementsByTagName("button")[selectedOptionIndex].className = "selected";
             }
+        } else if (name === "theme"){
+            this.renderAll();
+            this.options = this.internalOptions;
         }
     }
 }
@@ -105,10 +159,125 @@ export class TypeSelectView extends HTMLElement {
     static get observedAttributes() {
         return ["theme", "placeholder"];
     }
+    attributeChangedCallback(name: string, oldValue: any, newValue: any){
+        if (oldValue === newValue) return;
+        if (name === "theme"){
+            const style = this.shadowRoot.getElementById("root-style");
+            const theme: string = newValue;
+            this.shadowRoot.getElementById("select-view").setAttribute("theme", theme);
+        if (theme === "dark"){
+         style.textContent = `
+        div#root {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        }
+        div#sub {
+          z-index: 1;
+          position: absolute;
+          top: 45px;
+          width: calc(100% - 8px);
+          margin: 0px 4px;
+          border: 1px solid rgba(0, 0, 0, 0.7);
+background-color: #333333;
+        }
+        button#create-new {
+          text-align: start;
+          background-color: #333333;
+color: white;
+          border: none;
+          padding: 8px 4px;
+        }
+        button#create-new:hover {
+          background-color: #505050;
+        }
+        .d-none { display: none; }
+        .d-block { display: block;}
+        div#sub.d-flex {
+          display: flex; flex-direction: column;
+          box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
+        }
+        input#search {
+          background-color: #303030;
+          transition: border-color 0.1s;
+          font-size: 1rem;
+          margin: 4px 4px;
+          border-radius: 0px;
+          border: 2px solid #303030;
+          padding: 8px 8px;
+          outline: none;
+color: white;
+}    input#search:focus-visible {
+border: 2px solid rgba(100, 170, 255, 0.7);
+outline-width: 0;
+}
+input#search.selected {
+color: #FF3311;
+border-color: #FF3311;
+}
+`;
+        } else {
+ style.textContent = `
+        div#root {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        }
+        div#sub {
+          z-index: 1;
+          position: absolute;
+          top: 45px;
+          width: calc(100% - 8px);
+          margin: 0px 4px;
+          border: 1px solid #B0B0B0;
+background-color: white;
+        }
+        button#create-new {
+          text-align: start;
+          background-color: #FFFFFF;
+color: white;
+          border: none;
+          padding: 8px 4px;
+          color:black;
+          font-size: 1rem;
+        }
+        button#create-new:hover {
+          background-color: #F0F0F0;
+        }
+        .d-none { display: none; }
+        .d-block { display: block;}
+        div#sub.d-flex {
+          display: flex; flex-direction: column;
+          box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+        }
+        input#search {
+          background-color: #FFFFFF;
+          transition: border-color 0.1s;
+          font-size: 1rem;
+          margin: 5px 5px;
+          border-radius: 0px;
+          border: 1px solid #707070;
+          padding: 8px 8px;
+          outline: none;
+color: black;
+}    input#search:focus-visible {
+border: 2px solid rgba(100, 170, 255, 0.7);
+margin: 4px;
+outline-width: 0;
+}
+input#search.selected {
+color: #FF3311;
+border-color: #FF3311;
+}
+`;
+        }
+        }
+    }
     constructor(){
         super();
         const shadow = this.attachShadow({mode: "open"});
         const style = document.createElement("style");
+        style.setAttribute("id", "root-style");
         const theme: string = this.getAttribute("theme");
         if (theme === "dark"){
          style.textContent = `

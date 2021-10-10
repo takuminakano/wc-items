@@ -3,6 +3,8 @@ import './button';
 import './linkComponent';
 import './inputs';
 import './tabSelection';
+import './notification';
+import './switch';
 // import { TabSelection } from './tabSelection';
 customElements.define("custom-select-view", CustomSelectView);
 customElements.define("type-select-view", TypeSelectView);

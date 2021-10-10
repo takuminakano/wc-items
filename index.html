@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <head></head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>WC items</title>
+    </head>
     <body style="margin: 0px;">
         <div style="background-color: black; padding: 8px;">
             <h5 style="color: white; margin: 8px 0px;">Dark theme</h5>
@@ -12,9 +16,17 @@
             <type-select-view theme="light"></type-select-view>
             <tab-selection labels='["Dog", "Cat", "Bird"]' theme="light" style="display: inline-block; width: 200px; margin: 4px 0px;"></tab-selection>
             <button-component label="Sample Button" style="display: inline-block"></button-component>
-            <button-component label="Sample Button" theme="bg-transparent" style="display: inline-block;" onclick="alert('click')"></button-component>
+            <button-component label="Click here to see notification" theme="bg-transparent" style="display: inline-block;" onclick="document.getElementById('notification').show('Notification title', 'Button clicked');"></button-component>
+            <hover-notification id="notification" theme="light"></hover-notification>
+            <switch-component></switch-component>
             <link-component to="#" label="Link"></link-component>
         </div>
         <script src="./dist/index.js"></script>
+        <script>
+         const notification = document.getElementById("notification");
+         // document.getElementById("notification").show("Notification title", "Notification message");
+         notification.addEventListener("ok-clicked", ()=>{console.log("ok")});
+         notification.addEventListener("dismiss-clicked", ()=>{console.log("dismiss")});
+        </script>
     </body>
 </html>
