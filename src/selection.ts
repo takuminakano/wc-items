@@ -144,6 +144,7 @@ color: white;
             }
         } else if (name === "theme"){
             this.renderAll();
+            this.options = this.internalOptions;
         }
     }
 }
