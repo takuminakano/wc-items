@@ -7,6 +7,12 @@ export class ComponentBase extends HTMLElement {
         shadow.innerHTML = this.renderHTML();
         shadow.appendChild(style);
     }
+    renderAll(){
+        const style: HTMLElement = document.createElement("style");
+        style.textContent = this.getStyle();
+        this.shadowRoot.innerHTML = this.renderHTML();
+        this.shadowRoot.appendChild(style);
+    }
     getStyle(){
         return ``;
     }

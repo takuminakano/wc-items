@@ -20,3 +20,7 @@ Usage:
 ```html
 <tab-select labels='["Dog", "Cat", "Bird"]'></tab-select>
 ```
+### switch-component
+```html
+<switch-component></switch-component>
+```

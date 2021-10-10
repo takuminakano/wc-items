@@ -2,10 +2,11 @@
   "name": "wc-items",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "webpack"
   },
+    "files": ["src"],
   "keywords": [],
   "author": "",
   "license": "MIT",
