@@ -15,6 +15,12 @@ export class SwitchComponent extends ComponentBase {
         const toggleOn: boolean = toggleElement.classList.contains("on");
         toggleElement.className = toggleOn? "off" : "on";
         containerElement.className = toggleOn? "off": "on";
+        this.dispatchEvent(new CustomEvent(
+            "switch-toggle",
+            {detail: {
+                toggleOn: !toggleOn
+            }}
+        ));
     }
     getStyle(){
         return `
@@ -39,6 +45,7 @@ export class SwitchComponent extends ComponentBase {
         }
         span{
         font-size: 0.65rem;
+        font-family: system-ui;
         display: inline-flex;
         align-items: center;
         height: 100%;
