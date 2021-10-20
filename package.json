@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "prepare": "tsc -p .",
+    "postinstall": "tsc -p ."
   },
-  "prepare": "tsc -p .",
   "keywords": [],
   "author": "",
   "license": "MIT",
