@@ -9,8 +9,8 @@ export class TabSelection extends ComponentBase {
         this.renderLabels();
     }
     renderLabels(){
-        const labels: string[] = JSON.parse(this.getAttribute("labels"));
-        const rootElement = this.shadowRoot.getElementById("root");
+        const labels: string[] = JSON.parse(this.getAttribute("labels")!);
+        const rootElement = this.shadowRoot!.getElementById("root")!;
         rootElement.innerText = "";
         if (this.currentSelectedIndex < 0){
             const selectedIndex = parseInt(this.getAttribute("optionindex") || "0");

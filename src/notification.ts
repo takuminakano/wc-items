@@ -92,11 +92,11 @@ background-color: rgba(255, 255, 255, 0.1);
     }
     constructor(){
         super();
-        this.shadowRoot.getElementById("button-dismiss").addEventListener("click", () => {
+        this.shadowRoot!.getElementById("button-dismiss")!.addEventListener("click", () => {
             this.hide();
             this.dispatchEvent(new CustomEvent("dismiss-clicked"));
         });
-        this.shadowRoot.getElementById("button-ok").addEventListener("click", () => {
+        this.shadowRoot!.getElementById("button-ok")!.addEventListener("click", () => {
             this.hide();
             this.dispatchEvent(new CustomEvent("ok-clicked"));
         });
@@ -110,18 +110,18 @@ background-color: rgba(255, 255, 255, 0.1);
         }, 5000);
     }
     set title(title: string){
-        this.shadowRoot.getElementById("title").innerText = title;
+        this.shadowRoot!.getElementById("title")!.innerText = title;
     }
     set message(message: string){
-        this.shadowRoot.getElementById("content").innerText = message;
+        this.shadowRoot!.getElementById("content")!.innerText = message;
     }
     showContainer(){
         const theme = this.getAttribute("theme") || "light";
-        this.shadowRoot.getElementById("container").className = `${theme}`;
+        this.shadowRoot!.getElementById("container")!.className = `${theme}`;
     }
     hide(){
         const theme = this.getAttribute("theme") || "light";
-        this.shadowRoot.getElementById("container").className = `${theme} d-none`;
+        this.shadowRoot!.getElementById("container")!.className = `${theme} d-none`;
     }
 }
 customElements.define("hover-notification", HoverNotification);

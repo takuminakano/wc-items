@@ -6,18 +6,17 @@ export class ButtonItem extends ComponentBase {
     attributeChangedCallback(name: string, oldValue: any, newValue: any){
         if (oldValue == newValue) return;
         if (name === "label") {
-            this.shadowRoot.getElementById("button").innerText = newValue;
+            this.shadowRoot!.getElementById("button")!.innerText = newValue;
         }
     }
     constructor(){
       super();
-      this.shadowRoot.getElementById("button").addEventListener("focus", () => {
-        this.shadowRoot.getElementById("container").className = `focus ${this.getAttribute("theme")}`;
+      this.shadowRoot!.getElementById("button")!.addEventListener("focus", () => {
+        this.shadowRoot!.getElementById("container")!.className = `focus ${this.getAttribute("theme")}`;
       });
 
-      this.shadowRoot.getElementById("button").addEventListener("blur", () => {
-        this.shadowRoot.getElementById("container").className = this.getAttribute("theme");
-
+      this.shadowRoot!.getElementById("button")!.addEventListener("blur", () => {
+        this.shadowRoot!.getElementById("container")!.className = this.getAttribute("theme")!;
       });
     }
     getStyle(){

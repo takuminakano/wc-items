@@ -13,7 +13,14 @@ module.exports = {
             {
                 test: /\.ts$/,
                 use: [
-                    "ts-loader"
+                    { 
+                        loader: "ts-loader",
+                        options : {
+                        compilerOptions: {
+                            strict: true,
+                        }
+                        }
+                    }
                 ]
             }
         ]

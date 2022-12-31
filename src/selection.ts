@@ -102,13 +102,13 @@ color: white;
 }
 `;
         }
-        this.shadowRoot.innerHTML = `<div><div id="options-list" style="display: flex; flex-direction: column;"></div></div>`;
-        this.shadowRoot.appendChild(style);
+        this.shadowRoot!.innerHTML = `<div><div id="options-list" style="display: flex; flex-direction: column;"></div></div>`;
+        this.shadowRoot!.appendChild(style);
 
     }
     set options(options: {[key: string]:any}[]){
         this.internalOptions = options;
-        const optionsListContainer = this.shadowRoot.getElementById("options-list");
+        const optionsListContainer = this.shadowRoot!.getElementById("options-list")!;
         optionsListContainer.innerText = "";
         for(const option of options){
             const optionElement = document.createElement("button");
@@ -136,11 +136,11 @@ color: white;
             // re-draw
             const selectedOptionIndex = parseInt(newValue);
             if (selectedOptionIndex < 0) return;
-            for(const element of this.shadowRoot.getElementById("options-list").getElementsByTagName("button")){
+            for(const element of this.shadowRoot!.getElementById("options-list")!.getElementsByTagName("button")){
                 element.className = "";
             }
-            if (this.shadowRoot.getElementById("options-list").getElementsByTagName("button").length > selectedOptionIndex){
-                this.shadowRoot.getElementById("options-list").getElementsByTagName("button")[selectedOptionIndex].className = "selected";
+            if (this.shadowRoot!.getElementById("options-list")!.getElementsByTagName("button").length > selectedOptionIndex){
+                this.shadowRoot!.getElementById("options-list")!.getElementsByTagName("button")[selectedOptionIndex].className = "selected";
             }
         } else if (name === "theme"){
             this.renderAll();
@@ -150,6 +150,7 @@ color: white;
 }
 
 export class TypeSelectView extends HTMLElement {
+    shadowRoot: ShadowRoot = new ShadowRoot();
     Options: {[key: string] : any }[]= [
         {value: 0, label: "dog"},
         {value: 1, label: "cat"},
@@ -162,9 +163,9 @@ export class TypeSelectView extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: any, newValue: any){
         if (oldValue === newValue) return;
         if (name === "theme"){
-            const style = this.shadowRoot.getElementById("root-style");
+            const style = this.shadowRoot.getElementById("root-style")!;
             const theme: string = newValue;
-            this.shadowRoot.getElementById("select-view").setAttribute("theme", theme);
+            this.shadowRoot.getElementById("select-view")!.setAttribute("theme", theme);
         if (theme === "dark"){
          style.textContent = `
         div#root {
@@ -278,7 +279,7 @@ border-color: #FF3311;
         const shadow = this.attachShadow({mode: "open"});
         const style = document.createElement("style");
         style.setAttribute("id", "root-style");
-        const theme: string = this.getAttribute("theme");
+        const theme: string = this.getAttribute("theme")!;
         if (theme === "dark"){
          style.textContent = `
         div#root {
@@ -399,8 +400,8 @@ border-color: #FF3311;
 `;
 
         shadow.appendChild(style);
-        const searchElement = shadow.getElementById("search");
-        const searchFormElement = shadow.getElementById("search-form");
+        const searchElement = shadow.getElementById("search")!;
+        const searchFormElement = shadow.getElementById("search-form")!;
         searchElement.oninput = (event: Event) => {
             // console.log("oninput");
             this.onSearchInputChange((event.target as any).value);
@@ -415,7 +416,7 @@ border-color: #FF3311;
                 // this.shadowRoot.getElementById("search").blur();
                 // setTimeout(()=>{this.onFocus();}, 20);
                 this.onFocus();
-                this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
+                this.shadowRoot.getElementById("select-view")!.setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             } else if (event.key === "ArrowDown") {
                 this.selectedOptionIndex += 1;
                 if (this.selectedOptionIndex < 0) this.selectedOptionIndex = 0;
@@ -423,7 +424,7 @@ border-color: #FF3311;
                 // this.shadowRoot.getElementById("search").blur();
                 this.onFocus();
                 // setTimeout(()=>{this.onFocus();}, 20);
-                this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
+                this.shadowRoot.getElementById("select-view")!.setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             } else if (event.key === "Escape") {
                 this.onBlur();
             }
@@ -456,16 +457,16 @@ border-color: #FF3311;
           // this.onBlur()
         };
         this.onfocus = ()=>{this.onFocus()};
-
-        shadow.getElementById("select-view").addEventListener("option-select", (event: CustomEvent) => {
+        const selectView = shadow.getElementById("select-view")!;
+        selectView.addEventListener("option-select", ((event: CustomEvent) => {
           // console.debug("received option-select");
           // BUG: safariではinputにフォーカスがあったていると、クリックイベントが起きない。
             const selectedValue = (event.detail as any).value;
             this.onOptionSelected((selectedValue));
-        });
+        }) as EventListener);
         // this.shadowRoot.getElementById("sub").setAttribute("style", "display: none;");
-        this.shadowRoot.getElementById("sub").className = "d-none";
-        const createNewButton = this.shadowRoot.getElementById("create-new");
+        this.shadowRoot.getElementById("sub")!.className = "d-none";
+        const createNewButton = this.shadowRoot.getElementById("create-new")!;
         createNewButton.addEventListener("click", (event: Event) => {this.onCreateNewButtonClicked();});
         createNewButton.className = "d-none";
     }
@@ -477,7 +478,7 @@ border-color: #FF3311;
         } else if (this.selectedOptionIndex >= 0 && this.selectedOptionIndex <= this.Options.length){
             this.onOptionSelected(this.options[this.selectedOptionIndex]["value"]);
         } else {
-            if (this.shadowRoot.getElementById("create-new").className === "d-block") {
+            if (this.shadowRoot.getElementById("create-new")!.className === "d-block") {
                 this.onCreateNewButtonClicked();
             }
         }
@@ -509,7 +510,7 @@ border-color: #FF3311;
             if (option.value === value){
                 label = option.label;
                 this.selectedOptionIndex = optionIndex;
-                this.shadowRoot.getElementById("select-view").setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
+                this.shadowRoot.getElementById("select-view")!.setAttribute("selectedoptionindex", this.selectedOptionIndex.toString());
             }
             optionIndex += 1;
         }
@@ -525,16 +526,16 @@ border-color: #FF3311;
     onFocus(){
         // this.shadowRoot.getElementById("sub").setAttribute("style", "display: block;");
         // this.shadowRoot.getElementById("sub").setAttribute("style", "display: flex;");
-        this.shadowRoot.getElementById("sub").className = "d-flex";
-        this.shadowRoot.getElementById("search").focus();
+        this.shadowRoot.getElementById("sub")!.className = "d-flex";
+        this.shadowRoot.getElementById("search")!.focus();
     }
     onBlur(){
         // this.shadowRoot.getElementById("sub").setAttribute("style", "display: none;");
-        this.shadowRoot.getElementById("search").blur();
-        this.shadowRoot.getElementById("sub").className = "d-none";
+        this.shadowRoot.getElementById("search")!.blur();
+        this.shadowRoot.getElementById("sub")!.className = "d-none";
     }
     setCreateNewButtonDisplay(filteredOptions: {[key: string]:string}[], searchQuery: string){
-        const createNewButton = this.shadowRoot.getElementById("create-new");
+        const createNewButton = this.shadowRoot.getElementById("create-new")!;
         createNewButton.innerText = `Create: ${searchQuery}`;
 
         if (searchQuery === "") {
@@ -577,6 +578,6 @@ border-color: #FF3311;
     }
     set selected(selected: boolean) {
         // console.log("set selected");
-        this.shadowRoot.getElementById("search").className = selected? "selected" : "not-selected";
+        this.shadowRoot.getElementById("search")!.className = selected? "selected" : "not-selected";
     }
 }

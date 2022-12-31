@@ -7,11 +7,11 @@ export class SwitchComponent extends ComponentBase {
         // toggleElement.addEventListener("click", () => {
         //     this.toggleOnOff();
         // });
-        this.shadowRoot.getElementById("container").addEventListener("click", () => {this.toggleOnOff();});
+        this.shadowRoot!.getElementById("container")?.addEventListener("click", () => {this.toggleOnOff();});
     }
     toggleOnOff(){
-        const toggleElement = this.shadowRoot.getElementById("toggle");
-        const containerElement = this.shadowRoot.getElementById("container");
+        const toggleElement = this.shadowRoot!.getElementById("toggle")!;
+        const containerElement = this.shadowRoot!.getElementById("container")!;
         const toggleOn: boolean = toggleElement.classList.contains("on");
         toggleElement.className = toggleOn? "off" : "on";
         containerElement.className = toggleOn? "off": "on";
