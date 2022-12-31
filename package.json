@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "webpack",
-    "prepare": "tsc -p .",
-    "postinstall": "tsc -p ."
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",

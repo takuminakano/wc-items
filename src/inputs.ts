@@ -9,7 +9,7 @@ export class TextInput extends ComponentBase {
             this.dispatchEvent(new CustomEvent("event"));
         }
         cascadeEvent.bind(this);
-        const inputElement: HTMLInputElement = (this.shadowRoot.getElementById("text-input") as HTMLInputElement);
+        const inputElement: HTMLInputElement = (this.shadowRoot!.getElementById("text-input") as HTMLInputElement);
         //inputElement.oninput = (e: Event) => {cascadeEvent(e)};
         inputElement.addEventListener("click", (e) => {cascadeEvent(e)});
         // inputElement.onkeydown = (e: Event) => {cascadeEvent(e)};
